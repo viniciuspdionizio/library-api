@@ -9,7 +9,9 @@ import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,7 @@ public class UserService {
     }
 
     public Page<UserResponseDTO> getAll(@Nullable String filter, @Nonnull Pageable pageable) {
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().and(Sort.by("id")));
         return this.userRepository.findAll(filter, pageable).map(this.userMapper::toDTO);
     }
 
