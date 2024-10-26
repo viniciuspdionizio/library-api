@@ -6,6 +6,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "app_user")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @EntityListeners(AuditingEntityListener.class)
@@ -40,7 +42,7 @@ public class UserEntity {
 
     @NotNull
     @CreatedDate
-    @Column(nullable = false, updatable = false, insertable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
 }

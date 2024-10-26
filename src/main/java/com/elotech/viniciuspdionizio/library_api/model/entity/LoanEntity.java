@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
@@ -13,6 +14,7 @@ import lombok.EqualsAndHashCode;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "loan")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class LoanEntity {
@@ -35,6 +37,7 @@ public class LoanEntity {
     private LocalDate loanDate = LocalDate.now();
 
     @NotNull
+    // TODO Add @FutureOrPresent
     private LocalDate returnDate;
 
     @NotNull
