@@ -1,4 +1,4 @@
-CREATE TABLE user
+CREATE TABLE app_user
 (
     user_id      SERIAL,
     name         VARCHAR(50)  NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE loan
     status      BOOLEAN NOT NULL DEFAULT TRUE,
 
     CONSTRAINT pk_loan PRIMARY KEY (loan_id),
-    CONSTRAINT fk_loan_user FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,
+    CONSTRAINT fk_loan_user FOREIGN KEY (user_id) REFERENCES app_user (user_id) ON DELETE CASCADE,
     CONSTRAINT fk_loan_book FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE CASCADE,
     CONSTRAINT chk_loan_loan_date CHECK ( loan_date <= CURRENT_DATE )
 );
