@@ -6,6 +6,8 @@ import com.elotech.viniciuspdionizio.library_api.model.dto.loan.LoanResponseDTO;
 import com.elotech.viniciuspdionizio.library_api.service.LoanService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,6 +27,14 @@ import java.time.LocalDate;
 public class LoanRestController implements LoanController {
 
     private final LoanService loanService;
+
+    @Override
+    public Page<LoanResponseDTO> getAll(@RequestParam(required = false) Integer userId,
+                                        @RequestParam(required = false) Integer bookId,
+                                        @RequestParam(defaultValue = "true") Boolean status,
+                                        Pageable pageable) {
+        return this.loanService.getAll(userId, bookId, status, pageable);
+    }
 
     @Override
     @PostMapping

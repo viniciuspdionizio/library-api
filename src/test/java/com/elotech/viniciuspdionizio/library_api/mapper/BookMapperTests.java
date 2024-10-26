@@ -2,6 +2,7 @@ package com.elotech.viniciuspdionizio.library_api.mapper;
 
 import com.elotech.viniciuspdionizio.library_api.model.dto.book.BookRequestDTO;
 import com.elotech.viniciuspdionizio.library_api.model.entity.BookEntity;
+import com.elotech.viniciuspdionizio.library_api.model.enums.BookCategory;
 import com.elotech.viniciuspdionizio.library_api.model.mapper.BookMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class BookMapperTests {
 
     @Test
     public void shouldMapBookRequestToEntity() {
-        var entity = bookMapper.toEntity(new BookRequestDTO("Book 1", "Vinicius Dionizio", "123456", LocalDate.now()));
+        var entity = bookMapper.toEntity(new BookRequestDTO("Book 1", "Vinicius Dionizio", "123456", LocalDate.now(), BookCategory.FICTION));
         assertNull(entity.getId());
         assertEquals("Book 1", entity.getTitle());
         assertEquals("Vinicius Dionizio", entity.getAuthor());
@@ -46,7 +47,7 @@ public class BookMapperTests {
         entity.setAuthor("Vinicius Dionizio");
         entity.setIsbn("123456");
         entity.setPublishedDate(LocalDate.now());
-        var dto = new BookRequestDTO("Book 2", "Vinicius de Paiva Dionizio", "1234567", LocalDate.now().minusDays(10));
+        var dto = new BookRequestDTO("Book 2", "Vinicius de Paiva Dionizio", "1234567", LocalDate.now().minusDays(10), BookCategory.BIOGRAPHY);
         this.bookMapper.update(dto, entity);
         assertEquals("Book 2", entity.getTitle());
         assertEquals("Vinicius de Paiva Dionizio", entity.getAuthor());

@@ -22,15 +22,16 @@ public class LoanRepository {
         return Optional.ofNullable(em.find(LoanEntity.class, id));
     }
 
-    public Page<LoanEntity> findAll(Integer userId, Integer bookId, Pageable pageable) {
+    public Page<LoanEntity> findAll(Integer userId, Integer bookId, Boolean status, Pageable pageable) {
         var loans = em.createQuery("""
                         SELECT l FROM LoanEntity l
-                        WHERE
+                        WHERE l.status = :status
                         (:userId IS NULL OR l.user.id = :userId)
                         AND (:bookId IS NULL OR l.book.id = :bookId)
                         """, LoanEntity.class)
                 .setParameter("userId", userId)
                 .setParameter("bookId", bookId)
+                .setParameter("status", status)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();

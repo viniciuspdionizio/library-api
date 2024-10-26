@@ -1,7 +1,10 @@
 package com.elotech.viniciuspdionizio.library_api.model.entity;
 
+import com.elotech.viniciuspdionizio.library_api.model.enums.BookCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,5 +39,9 @@ public class BookEntity {
 
     @NotNull
     private LocalDate publishedDate;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private BookCategory category;
 
 }

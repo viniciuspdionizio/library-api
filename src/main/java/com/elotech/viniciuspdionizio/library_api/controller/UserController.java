@@ -1,5 +1,6 @@
 package com.elotech.viniciuspdionizio.library_api.controller;
 
+import com.elotech.viniciuspdionizio.library_api.model.dto.book.BookResponseDTO;
 import com.elotech.viniciuspdionizio.library_api.model.dto.user.UserRequestDTO;
 import com.elotech.viniciuspdionizio.library_api.model.dto.user.UserResponseDTO;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,8 @@ public interface UserController {
     ResponseEntity<UserResponseDTO> getById(Integer id);
 
     Page<UserResponseDTO> getAll(String filter, Pageable pageable);
+
+    Page<BookResponseDTO> getRecommendations(Integer id, Pageable pageable);
 
     ResponseEntity<UserResponseDTO> register(UserRequestDTO userRequestDTO);
 

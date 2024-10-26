@@ -10,6 +10,10 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +31,12 @@ public class LoanService {
 
     private final LoanRepository loanRepository;
     private final LoanMapper loanMapper;
+
+    public Page<LoanResponseDTO> getAll(@Nullable Integer userId, @Nullable Integer bookId,
+                                        @Nonnull Boolean status, Pageable pageable) {
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().and(Sort.by("id")));
+        return this.loanRepository.findAll(userId, bookId, status, pageable).map(loanMapper::toDTO);
+    }
 
     @Transactional
     public LoanResponseDTO register(@Nonnull LoanRequestDTO requestData) {

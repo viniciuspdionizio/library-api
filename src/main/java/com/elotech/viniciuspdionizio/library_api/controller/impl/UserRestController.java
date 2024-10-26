@@ -1,8 +1,10 @@
 package com.elotech.viniciuspdionizio.library_api.controller.impl;
 
 import com.elotech.viniciuspdionizio.library_api.controller.UserController;
+import com.elotech.viniciuspdionizio.library_api.model.dto.book.BookResponseDTO;
 import com.elotech.viniciuspdionizio.library_api.model.dto.user.UserRequestDTO;
 import com.elotech.viniciuspdionizio.library_api.model.dto.user.UserResponseDTO;
+import com.elotech.viniciuspdionizio.library_api.service.BookService;
 import com.elotech.viniciuspdionizio.library_api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class UserRestController implements UserController {
 
     private final UserService userService;
+    private final BookService bookService;
 
     @Override
     @GetMapping("/{id}")
@@ -37,6 +40,12 @@ public class UserRestController implements UserController {
     @GetMapping("/page")
     public Page<UserResponseDTO> getAll(@RequestParam(required = false) String filter, Pageable pageable) {
         return this.userService.getAll(filter, pageable);
+    }
+
+    @Override
+    @GetMapping("/{id}/recommendations")
+    public Page<BookResponseDTO> getRecommendations(@PathVariable Integer id, Pageable pageable) {
+
     }
 
     @Override

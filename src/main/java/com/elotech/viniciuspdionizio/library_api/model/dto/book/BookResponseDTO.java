@@ -1,5 +1,7 @@
 package com.elotech.viniciuspdionizio.library_api.model.dto.book;
 
+import com.elotech.viniciuspdionizio.library_api.model.enums.BookCategory;
+
 import java.time.LocalDate;
 
 public record BookResponseDTO(
@@ -7,6 +9,6 @@ public record BookResponseDTO(
         String title,
         String author,
         String isbn,
-        LocalDate publishedDate
-) {
+        LocalDate publishedDate,
+        BookCategory category) {
 }

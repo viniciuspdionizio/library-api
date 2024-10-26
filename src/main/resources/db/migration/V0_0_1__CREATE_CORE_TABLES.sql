@@ -12,10 +12,11 @@ CREATE TABLE app_user
 CREATE TABLE book
 (
     book_id        SERIAL,
-    title          VARCHAR(30) NOT NULL,
+    title          VARCHAR(50) NOT NULL,
     author         VARCHAR(50) NOT NULL,
     isbn           VARCHAR(30) NOT NULL,
     published_date DATE        NOT NULL,
+    category       VARCHAR(20) NOT NULL,
 
     CONSTRAINT pk_book PRIMARY KEY (book_id)
 );
@@ -40,16 +41,19 @@ CREATE FUNCTION fn_check_active_loan()
     RETURNS TRIGGER AS $$
 BEGIN
     -- Verifica se já existe um empréstimo ativo para o mesmo `book_id`
-    IF (SELECT EXISTS (SELECT 1 FROM loan WHERE book_id = NEW.book_id AND status = TRUE))
+    IF
+(
+SELECT EXISTS (SELECT 1 FROM loan WHERE book_id = NEW.book_id AND status = TRUE))
     THEN RAISE EXCEPTION 'Um livro só pode ter um empréstimo ativo por vez.';
-    END IF;
+END IF;
 RETURN NEW;
 END;
 $$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_check_active_loan
-BEFORE INSERT OR UPDATE ON loan
+    BEFORE INSERT OR
+UPDATE ON loan
     FOR EACH ROW
-        WHEN (NEW.status = TRUE) -- Verifica apenas quando o empréstimo está sendo marcado como ativo
-EXECUTE FUNCTION fn_check_active_loan();
+    WHEN (NEW.status = TRUE) -- Verifica apenas quando o empréstimo está sendo marcado como ativo
+    EXECUTE FUNCTION fn_check_active_loan();

@@ -4,6 +4,7 @@ import com.elotech.viniciuspdionizio.library_api.model.dto.book.BookRequestDTO;
 import com.elotech.viniciuspdionizio.library_api.model.dto.book.BookResponseDTO;
 import com.elotech.viniciuspdionizio.library_api.model.mapper.BookMapper;
 import com.elotech.viniciuspdionizio.library_api.repository.BookRepository;
+import com.elotech.viniciuspdionizio.library_api.util.PageableUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,13 @@ public class BookService {
     }
 
     public Page<BookResponseDTO> getAll(@Nullable String filter, @Nonnull Pageable pageable) {
-        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().and(Sort.by("id")));
+        pageable = PageableUtil.addSort(pageable, "id");
         return this.bookRepository.findAll(filter, pageable).map(this.bookMapper::toDTO);
+    }
+
+    public Page<BookResponseDTO> getRecommendationByUserId(@Nonnull Integer userId, Pageable pageable) {
+        pageable = PageableUtil.addSort(pageable, "id");
+
     }
 
     @Transactional
