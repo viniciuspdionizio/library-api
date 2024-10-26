@@ -1,13 +1,13 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password:
+    driverClassName: org.postgresql.Driver
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/library-dev?currentSchema=test}
+    username: ${DATASOURCE_USER:postgres}
+    password: ${DATASOURCE_PASS:admin}
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     open-in-view: false
     database: postgresql
-    database-platform: org.hibernate.dialect.H2Dialect
   flyway:
     clean-disabled: false

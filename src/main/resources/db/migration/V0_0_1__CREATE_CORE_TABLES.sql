@@ -33,4 +33,23 @@ CREATE TABLE loan
     CONSTRAINT fk_loan_user FOREIGN KEY (user_id) REFERENCES app_user (user_id) ON DELETE CASCADE,
     CONSTRAINT fk_loan_book FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE CASCADE,
     CONSTRAINT chk_loan_loan_date CHECK ( loan_date <= CURRENT_DATE )
+--     CONSTRAINT chk_loan_return_date CHECK (return_date >= loan_date)  -- TODO
 );
+
+CREATE FUNCTION fn_check_active_loan()
+    RETURNS TRIGGER AS $$
+BEGIN
+    -- Verifica se já existe um empréstimo ativo para o mesmo `book_id`
+    IF (SELECT EXISTS (SELECT 1 FROM loan WHERE book_id = NEW.book_id AND status = TRUE))
+    THEN RAISE EXCEPTION 'Um livro só pode ter um empréstimo ativo por vez.';
+    END IF;
+RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_check_active_loan
+BEFORE INSERT OR UPDATE ON loan
+    FOR EACH ROW
+        WHEN (NEW.status = TRUE) -- Verifica apenas quando o empréstimo está sendo marcado como ativo
+EXECUTE FUNCTION fn_check_active_loan();

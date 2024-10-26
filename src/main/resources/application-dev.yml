@@ -9,5 +9,10 @@ spring:
       ddl-auto: validate
     open-in-view: false
     database: postgresql
+    show-sql: true
   flyway:
     clean-disabled: false
+
+server:
+  error:
+    include-stacktrace: never

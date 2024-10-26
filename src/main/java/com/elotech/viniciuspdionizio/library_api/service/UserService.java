@@ -26,7 +26,7 @@ public class UserService {
     public UserResponseDTO getById(@Nonnull Integer id) {
         return this.userRepository.findById(id)
                 .map(this.userMapper::toDTO)
-                .orElseThrow(() -> new ObjectNotFoundException(id, "user"));
+                .orElseThrow(() -> new ObjectNotFoundException(id, "Usuário"));
     }
 
     public Page<UserResponseDTO> getAll(@Nullable String filter, @Nonnull Pageable pageable) {
@@ -44,7 +44,7 @@ public class UserService {
     @Transactional
     public UserResponseDTO update(@Nonnull Integer id, @Nonnull UserRequestDTO requestData) {
         var entity = this.userRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException(id, "user"));
+                .orElseThrow(() -> new ObjectNotFoundException(id, "Usuário"));
         this.userMapper.update(requestData, entity);
         return this.userMapper.toDTO(entity);
     }
@@ -52,7 +52,7 @@ public class UserService {
     @Transactional
     public void delete(@Nonnull Integer id) {
         if (!this.userRepository.existsById(id)) {
-            throw new ObjectNotFoundException(id, "user");
+            throw new ObjectNotFoundException(id, "Usuário");
         }
         this.userRepository.deleteById(id);
     }

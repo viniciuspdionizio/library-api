@@ -26,7 +26,7 @@ public class BookService {
     public BookResponseDTO getById(@Nonnull Integer id) {
         return this.bookRepository.findById(id)
                 .map(this.bookMapper::toDTO)
-                .orElseThrow(() -> new ObjectNotFoundException(id, "book"));
+                .orElseThrow(() -> new ObjectNotFoundException(id, "Livro"));
     }
 
     public Page<BookResponseDTO> getAll(@Nullable String filter, @Nonnull Pageable pageable) {
@@ -43,15 +43,14 @@ public class BookService {
 
     @Transactional
     public BookResponseDTO update(@Nonnull Integer id, @Nonnull BookRequestDTO requestData) {
-        var entity = this.bookRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "book"));
+        var entity = this.bookRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Livro"));
         this.bookMapper.update(requestData, entity);
-        this.bookRepository.save(entity);
         return this.bookMapper.toDTO(entity);
     }
 
     @Transactional
     public void delete(@Nonnull Integer id) {
-        if (!this.bookRepository.existsById(id)) throw new ObjectNotFoundException(id, "book");
+        if (!this.bookRepository.existsById(id)) throw new ObjectNotFoundException(id, "Livro");
         this.bookRepository.deleteById(id);
     }
 

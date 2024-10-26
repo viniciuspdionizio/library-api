@@ -49,7 +49,7 @@ public class UserRestController implements UserController {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> update(@PathVariable Integer id, UserRequestDTO userRequestDTO) {
+    public ResponseEntity<UserResponseDTO> update(@PathVariable Integer id, @RequestBody UserRequestDTO userRequestDTO) {
         var response = this.userService.update(id, userRequestDTO);
         return ResponseEntity.ok(response);
     }
