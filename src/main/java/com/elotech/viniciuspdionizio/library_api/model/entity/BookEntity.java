@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Book {
+public class BookEntity {
 
     @Id
     @EqualsAndHashCode.Include

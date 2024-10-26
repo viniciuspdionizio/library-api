@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Loan {
+public class LoanEntity {
 
     @Id
     @EqualsAndHashCode.Include
@@ -24,11 +24,11 @@ public class Loan {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
-    private Book book;
+    private BookEntity book;
 
     @NotNull
     @PastOrPresent
