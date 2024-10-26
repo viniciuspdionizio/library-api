@@ -13,7 +13,7 @@ public interface UserController {
 
     Page<UserResponseDTO> getAll(String filter, Pageable pageable);
 
-    Page<BookResponseDTO> getRecommendations(Integer id, Pageable pageable);
+    Page<BookResponseDTO> getRecommendations(Integer id, Boolean status, Pageable pageable);
 
     ResponseEntity<UserResponseDTO> register(UserRequestDTO userRequestDTO);
 

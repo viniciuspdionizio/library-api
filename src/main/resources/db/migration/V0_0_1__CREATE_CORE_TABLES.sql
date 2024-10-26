@@ -43,7 +43,7 @@ BEGIN
     -- Verifica se já existe um empréstimo ativo para o mesmo `book_id`
     IF
 (
-SELECT EXISTS (SELECT 1 FROM loan WHERE book_id = NEW.book_id AND status = TRUE))
+SELECT EXISTS (SELECT TRUE FROM loan WHERE book_id = NEW.book_id AND status = TRUE))
     THEN RAISE EXCEPTION 'Um livro só pode ter um empréstimo ativo por vez.';
 END IF;
 RETURN NEW;

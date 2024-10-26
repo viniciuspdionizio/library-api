@@ -4,15 +4,14 @@ import com.elotech.viniciuspdionizio.library_api.model.dto.book.BookRequestDTO;
 import com.elotech.viniciuspdionizio.library_api.model.dto.book.BookResponseDTO;
 import com.elotech.viniciuspdionizio.library_api.model.mapper.BookMapper;
 import com.elotech.viniciuspdionizio.library_api.repository.BookRepository;
+import com.elotech.viniciuspdionizio.library_api.repository.UserRepository;
 import com.elotech.viniciuspdionizio.library_api.util.PageableUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BookService {
 
+    private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
 
@@ -30,14 +30,17 @@ public class BookService {
                 .orElseThrow(() -> new ObjectNotFoundException(id, "Livro"));
     }
 
-    public Page<BookResponseDTO> getAll(@Nullable String filter, @Nonnull Pageable pageable) {
+    public Page<BookResponseDTO> getAll(@Nullable String filter, Boolean status, @Nonnull Pageable pageable) {
         pageable = PageableUtil.addSort(pageable, "id");
-        return this.bookRepository.findAll(filter, pageable).map(this.bookMapper::toDTO);
+        return this.bookRepository.findAll(filter, status, pageable).map(this.bookMapper::toDTO);
     }
 
-    public Page<BookResponseDTO> getRecommendationByUserId(@Nonnull Integer userId, Pageable pageable) {
+    public Page<BookResponseDTO> getRecommendationsByUserId(@Nonnull Integer userId, @Nullable Boolean status, Pageable pageable) {
+        this.checkIfExists(userId);
         pageable = PageableUtil.addSort(pageable, "id");
-
+        var categories = this.bookRepository.findCategoriesByUser(userId, status);
+        return this.bookRepository.findAllRecommendations(categories, pageable)
+                .map(this.bookMapper::toDTO);
     }
 
     @Transactional
@@ -58,6 +61,10 @@ public class BookService {
     public void delete(@Nonnull Integer id) {
         if (!this.bookRepository.existsById(id)) throw new ObjectNotFoundException(id, "Livro");
         this.bookRepository.deleteById(id);
+    }
+
+    private void checkIfExists(@Nonnull Integer userId) {
+        if (!this.userRepository.existsById(userId)) throw new ObjectNotFoundException(userId, "Usuário");
     }
 
 

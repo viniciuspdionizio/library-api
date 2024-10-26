@@ -10,7 +10,7 @@ public interface BookController {
 
     ResponseEntity<BookResponseDTO> getById(Integer id);
 
-    Page<BookResponseDTO> getAll(String filter, Pageable pageable);
+    Page<BookResponseDTO> getAll(String filter, Boolean status, Pageable pageable);
 
     ResponseEntity<BookResponseDTO> register(BookRequestDTO requestData);
 

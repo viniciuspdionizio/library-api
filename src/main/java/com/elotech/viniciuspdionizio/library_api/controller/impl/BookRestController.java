@@ -35,8 +35,10 @@ public class BookRestController implements BookController {
 
     @Override
     @GetMapping("/page")
-    public Page<BookResponseDTO> getAll(@RequestParam(required = false) String filter, Pageable pageable) {
-        return bookService.getAll(filter, pageable);
+    public Page<BookResponseDTO> getAll(@RequestParam(required = false) String filter,
+                                        @RequestParam(required = false) Boolean status,
+                                        Pageable pageable) {
+        return bookService.getAll(filter, status, pageable);
     }
 
     @Override

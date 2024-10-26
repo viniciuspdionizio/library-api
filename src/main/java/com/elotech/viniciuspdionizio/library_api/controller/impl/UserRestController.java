@@ -44,8 +44,10 @@ public class UserRestController implements UserController {
 
     @Override
     @GetMapping("/{id}/recommendations")
-    public Page<BookResponseDTO> getRecommendations(@PathVariable Integer id, Pageable pageable) {
-
+    public Page<BookResponseDTO> getRecommendations(@PathVariable Integer id,
+                                                    @RequestParam(required = false) Boolean status,
+                                                    Pageable pageable) {
+        return this.bookService.getRecommendationsByUserId(id, status, pageable);
     }
 
     @Override
