@@ -1,7 +1,9 @@
 package com.elotech.viniciuspdionizio.library_api.controller;
 
 import com.elotech.viniciuspdionizio.library_api.model.dto.user.UserRequestDTO;
+import com.elotech.viniciuspdionizio.library_api.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,10 +16,20 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class UserRestContollerTests {
+
+    @Autowired
+    private UserService userService;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
+
+    int userId;
+
+    @BeforeEach
+    void setUp() {
+        this.userId = this.userService.register(new UserRequestDTO("Name", "email@email.com", "123456")).id();
+    }
 
     @Test
     void shouldGetAllUsers() throws Exception {
@@ -64,7 +76,7 @@ public class UserRestContollerTests {
     @Test
     void shouldUpdateUser() throws Exception {
         var user = new UserRequestDTO("Updated name", "vinicius@email.com", "123456");
-        mockMvc.perform(MockMvcRequestBuilders.put("/users/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/%d".formatted(userId))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
@@ -72,7 +84,7 @@ public class UserRestContollerTests {
 
     @Test
     void shouldDeleteUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/users/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/%d".formatted(userId)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
     }
 

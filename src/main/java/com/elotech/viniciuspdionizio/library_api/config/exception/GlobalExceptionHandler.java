@@ -20,6 +20,12 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(LoanExistsActiveException.class)
+    public ResponseEntity<StandardError> loanExistsActiveException(LoanExistsActiveException e, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new StandardError(400, "Existem empréstimos", e.getLocalizedMessage(), request.getRequestURI()));
+    }
+
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)

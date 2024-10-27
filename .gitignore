@@ -31,8 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-
-### Temporário, depois vou remover pra adicionar docs
-docs/
-README.md

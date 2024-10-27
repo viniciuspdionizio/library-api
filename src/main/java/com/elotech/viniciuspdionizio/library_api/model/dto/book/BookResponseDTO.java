@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 public record BookResponseDTO(
         Integer id,
+        Boolean status,
         String title,
         String author,
         String isbn,

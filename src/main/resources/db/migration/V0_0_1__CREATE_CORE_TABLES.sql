@@ -33,8 +33,7 @@ CREATE TABLE loan
     CONSTRAINT pk_loan PRIMARY KEY (loan_id),
     CONSTRAINT fk_loan_user FOREIGN KEY (user_id) REFERENCES app_user (user_id) ON DELETE CASCADE,
     CONSTRAINT fk_loan_book FOREIGN KEY (book_id) REFERENCES book (book_id) ON DELETE CASCADE,
-    CONSTRAINT chk_loan_loan_date CHECK ( loan_date <= CURRENT_DATE )
---     CONSTRAINT chk_loan_return_date CHECK (return_date >= loan_date)  -- TODO
+    CONSTRAINT chk_loan_loan_date CHECK (loan_date <= CURRENT_DATE)
 );
 
 CREATE FUNCTION fn_check_active_loan()

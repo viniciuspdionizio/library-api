@@ -83,7 +83,8 @@ VALUES (1, 1, '2024-09-15', '2024-09-30', FALSE), -- Usuário 1 devolveu o Livro
        (3, 27, '2024-10-25', '2024-10-30', TRUE), -- Usuário 3, Livro 27
        (1, 28, '2024-10-20', '2024-10-30', TRUE), -- Usuário 1, Livro 28
        (2, 29, '2024-10-22', '2024-10-29', TRUE), -- Usuário 2, Livro 29
-       (3, 30, '2024-10-26', '2024-10-30', TRUE); -- Usuário 3, Livro 30
+       (3, 30, '2024-10-26', '2024-10-30', TRUE);
+-- Usuário 3, Livro 30
 
 
 -- Inserindo 20 empréstimos na tabela loan com status FALSE
@@ -109,6 +110,5 @@ VALUES (1, 1, '2024-09-15', '2024-09-30', FALSE),  -- Usuário 1 devolveu o Livr
        (2, 19, '2024-10-15', '2024-10-30', FALSE), -- Usuário 2 devolveu o Livro 19
        (3, 20, '2024-10-16', '2024-10-31', FALSE), -- Usuário 3 devolveu o Livro 20
        -- Usuário 4
-       (4, 6, '2024-10-16', '2024-10-31', FALSE), -- Usuário 3 devolveu o Livro 20
-       (4, 21, '2024-10-20', '2024-10-31', FALSE), -- Usuário 3 devolveu o Livro 20
-       (4, 25, '2024-10-25', '2024-10-31', FALSE); -- Usuário 3 devolveu o Livro 20
+       (4, 6, '2024-10-16', '2024-10-31', FALSE),  -- Usuário 3 devolveu o Livro 6
+       (4, 25, '2024-10-25', '2024-10-31', FALSE); -- Usuário 3 devolveu o Livro 25

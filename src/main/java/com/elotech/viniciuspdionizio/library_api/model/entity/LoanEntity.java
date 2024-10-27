@@ -40,7 +40,6 @@ public class LoanEntity {
     private LocalDate loanDate = LocalDate.now();
 
     @NotNull
-    // TODO Add @FutureOrPresent
     private LocalDate returnDate;
 
     @NotNull

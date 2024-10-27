@@ -26,7 +26,7 @@ public class LoanRepository {
         var loans = em.createQuery("""
                         SELECT l FROM LoanEntity l
                         WHERE l.status = :status
-                        (:userId IS NULL OR l.user.id = :userId)
+                        AND (:userId IS NULL OR l.user.id = :userId)
                         AND (:bookId IS NULL OR l.book.id = :bookId)
                         """, LoanEntity.class)
                 .setParameter("userId", userId)
@@ -38,15 +38,30 @@ public class LoanRepository {
 
         var totalElements = em.createQuery("""
                         SELECT COUNT(l) FROM LoanEntity l
-                        WHERE
-                        (:userId IS NULL OR l.user.id = :userId) 
+                        WHERE l.status = :status
+                        AND (:userId IS NULL OR l.user.id = :userId) 
                         AND (:bookId IS NULL OR l.book.id = :bookId) 
                         """, Long.class)
                 .setParameter("userId", userId)
                 .setParameter("bookId", bookId)
+                .setParameter("status", status)
                 .getSingleResult();
 
         return new PageImpl<>(loans, pageable, totalElements);
+    }
+
+    public Boolean existsActiveLoan(Integer userId, Integer bookId) {
+        return em.createQuery("""
+                        SELECT EXISTS (
+                            SELECT l FROM LoanEntity l
+                            WHERE l.status = true
+                            AND (:userId IS NULL OR l.user.id = :userId)
+                            AND (:bookId IS NULL OR l.book.id = :bookId)
+                        )
+                        """, Boolean.class)
+                .setParameter("userId", userId)
+                .setParameter("bookId", bookId)
+                .getSingleResult();
     }
 
     public void registerLoan(LoanEntity loan) {

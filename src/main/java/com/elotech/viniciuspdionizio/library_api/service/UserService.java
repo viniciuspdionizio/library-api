@@ -1,8 +1,10 @@
 package com.elotech.viniciuspdionizio.library_api.service;
 
+import com.elotech.viniciuspdionizio.library_api.config.exception.LoanExistsActiveException;
 import com.elotech.viniciuspdionizio.library_api.model.dto.user.UserRequestDTO;
 import com.elotech.viniciuspdionizio.library_api.model.dto.user.UserResponseDTO;
 import com.elotech.viniciuspdionizio.library_api.model.mapper.UserMapper;
+import com.elotech.viniciuspdionizio.library_api.repository.LoanRepository;
 import com.elotech.viniciuspdionizio.library_api.repository.UserRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final LoanRepository loanRepository;
     private final UserMapper userMapper;
 
     /**
@@ -99,9 +102,8 @@ public class UserService {
      */
     @Transactional
     public void delete(@Nonnull Integer id) throws ObjectNotFoundException {
-        if (!this.userRepository.existsById(id)) {
-            throw new ObjectNotFoundException(id, "Usuário");
-        }
+        if (!this.userRepository.existsById(id)) throw new ObjectNotFoundException(id, "Usuário");
+        if (this.loanRepository.existsActiveLoan(id, null)) throw new LoanExistsActiveException();
         this.userRepository.deleteById(id);
     }
 

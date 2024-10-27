@@ -1,9 +1,11 @@
 package com.elotech.viniciuspdionizio.library_api.service;
 
+import com.elotech.viniciuspdionizio.library_api.config.exception.LoanExistsActiveException;
 import com.elotech.viniciuspdionizio.library_api.model.dto.book.BookRequestDTO;
 import com.elotech.viniciuspdionizio.library_api.model.dto.book.BookResponseDTO;
 import com.elotech.viniciuspdionizio.library_api.model.mapper.BookMapper;
 import com.elotech.viniciuspdionizio.library_api.repository.BookRepository;
+import com.elotech.viniciuspdionizio.library_api.repository.LoanRepository;
 import com.elotech.viniciuspdionizio.library_api.repository.UserRepository;
 import com.elotech.viniciuspdionizio.library_api.util.PageableUtil;
 import jakarta.annotation.Nonnull;
@@ -24,6 +26,7 @@ public class BookService {
 
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final LoanRepository loanRepository;
     private final BookMapper bookMapper;
 
     /**
@@ -62,14 +65,12 @@ public class BookService {
     /**
      * Obtém recomendações de livros para um usuário específico.
      * Este método busca livros recomendados com base nas preferências do usuário
-     * identificado pelo `userId`. Você também pode passar um parâmetro de status
-     * para filtrar por livros ativos ou inativos.
+     * identificado pelo `userId`.
      *
      * @param userId O ID do usuário para quem as recomendações são feitas. Não pode ser nulo.
-     * @param status Um boolean que indica se deseja buscar apenas livros ativos (não emprestados) ou inativos (já emprestados), caso informe null, buscará ambos.
      * @return Uma lista de objetos `BookResponseDTO` com as recomendações de livros.
      */
-    public List<BookResponseDTO> getRecommendationsByUserId(@Nonnull Integer userId, @Nullable Boolean status) {
+    public List<BookResponseDTO> getRecommendationsByUserId(@Nonnull Integer userId) {
         this.checkIfExists(userId);
         return this.bookRepository.findAllRecommendations(userId)
                 .stream().map(this.bookMapper::toDTO).toList();
@@ -118,6 +119,7 @@ public class BookService {
     @Transactional
     public void delete(@Nonnull Integer id) {
         if (!this.bookRepository.existsById(id)) throw new ObjectNotFoundException(id, "Livro");
+        if (this.loanRepository.existsActiveLoan(null, id)) throw new LoanExistsActiveException();
         this.bookRepository.deleteById(id);
     }
 

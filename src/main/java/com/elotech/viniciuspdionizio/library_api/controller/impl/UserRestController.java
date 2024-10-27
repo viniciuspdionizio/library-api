@@ -46,9 +46,8 @@ public class UserRestController implements UserController {
 
     @Override
     @GetMapping("/{id}/recommendations")
-    public List<BookResponseDTO> getRecommendations(@PathVariable Integer id,
-                                                    @RequestParam(required = false) Boolean status) {
-        return this.bookService.getRecommendationsByUserId(id, status);
+    public List<BookResponseDTO> getRecommendations(@PathVariable Integer id) {
+        return this.bookService.getRecommendationsByUserId(id);
     }
 
     @Override

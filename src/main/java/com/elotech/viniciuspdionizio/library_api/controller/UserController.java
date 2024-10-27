@@ -15,7 +15,7 @@ public interface UserController {
 
     Page<UserResponseDTO> getAll(String filter, Pageable pageable);
 
-    List<BookResponseDTO> getRecommendations(Integer id, Boolean status);
+    List<BookResponseDTO> getRecommendations(Integer id);
 
     ResponseEntity<UserResponseDTO> register(UserRequestDTO userRequestDTO);
 

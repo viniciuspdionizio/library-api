@@ -2,7 +2,9 @@ package com.elotech.viniciuspdionizio.library_api.controller;
 
 import com.elotech.viniciuspdionizio.library_api.model.dto.book.BookRequestDTO;
 import com.elotech.viniciuspdionizio.library_api.model.enums.BookCategory;
+import com.elotech.viniciuspdionizio.library_api.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,10 +19,20 @@ import java.time.LocalDate;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class BookRestControllerTests {
+
+    @Autowired
+    private BookService bookService;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
+
+    private Integer bookId;
+
+    @BeforeEach
+    void setUp() {
+        bookId = this.bookService.register(new BookRequestDTO("Title", "Author", "1234", LocalDate.now(), BookCategory.DEFAULT)).id();
+    }
 
     @Test
     void shouldGetAllBooks() throws Exception {
@@ -67,7 +79,7 @@ public class BookRestControllerTests {
     @Test
     void shouldUpdateBook() throws Exception {
         var book = new BookRequestDTO("Title", "Author", "1234", LocalDate.now(), BookCategory.DEFAULT);
-        mockMvc.perform(MockMvcRequestBuilders.put("/books/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/books/%d".formatted(bookId))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(book)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
@@ -75,7 +87,7 @@ public class BookRestControllerTests {
 
     @Test
     void shouldDeleteBook() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/books/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/books/%d".formatted(bookId)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
     }
 

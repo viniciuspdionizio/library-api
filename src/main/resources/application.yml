@@ -1,7 +1,27 @@
 spring:
   application:
     name: library-api
+
+
+  # Configuração do profile dev, mas para fim de facilidade na execução da checagem do exercício, coloquei no application também
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/library-dev}
+    username: ${DATASOURCE_USER:postgres}
+    password: ${DATASOURCE_PASS:admin}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    database: postgresql
+    show-sql: true
+  flyway:
+    clean-disabled: false
+
+
 server:
+  error:
+    include-stacktrace: never
   port: 8000
   servlet:
-    context-path: /library/api
+    context-path: /api
