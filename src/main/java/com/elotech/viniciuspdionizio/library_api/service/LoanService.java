@@ -53,7 +53,7 @@ public class LoanService {
         var entity = this.loanRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, "Empréstimo"));
         if (status != null) entity.setStatus(status);
         if (returnDate != null) entity.setReturnDate(returnDate);
-        return null;
+        return this.loanMapper.toDTO(entity);
     }
 
     private void checkIfExists(Integer userId, Integer bookId) throws ObjectNotFoundException {

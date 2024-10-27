@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,7 +19,7 @@ public class UserServiceTests {
 
     @Test
     void shouldRegisterUser() {
-        var user = new UserRequestDTO("Vinicius", "viniciuspdionizio@gmail.com", "123456");
+        var user = new UserRequestDTO("Vinicius", "vinicius@email.com", "123456");
         var response = userService.register(user);
         assertNotNull(response.id());
     }
@@ -31,16 +32,15 @@ public class UserServiceTests {
 
     @Test
     void shouldUpdateUser() {
-        var user = new UserRequestDTO("Vinicius", "viniciuspdionizio@gmail.com", "123456");
-        var response = userService.register(user);
-        var id = response.id();
-        assertNotNull(response.id());
-        user = new UserRequestDTO("Name updated", "emailupdated@gmail.com", "123457");
-        var result = userService.update(id, user);
-        assertNotNull(result.id());
-        assertNotEquals("Vinicius", this.userService.getById(id).name());
-        assertNotEquals("viniciuspdionizio@gmail.com", this.userService.getById(id).name());
-        assertNotEquals("123456", this.userService.getById(id).phoneNumber());
+        var user = new UserRequestDTO("Vinicius", "vinicius@email.com", "123456");
+        var registerResponse = userService.register(user);
+        var id = registerResponse.id();
+        assertNotNull(registerResponse.id());
+        user = new UserRequestDTO("Name updated", "emailupdated@email.com", "123457");
+        var updateResponse = userService.update(id, user);
+        assertNotNull(updateResponse.id());
+        assertEquals(registerResponse.id(), updateResponse.id());
+        assertNotEquals(updateResponse, registerResponse);
     }
 
 }

@@ -15,6 +15,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 @Entity
 @Table(name = "book")
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class BookEntity {
 
@@ -49,5 +51,9 @@ public class BookEntity {
 
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private List<LoanEntity> loans;
+
+    public BookEntity(Integer id) {
+        this.id = id;
+    }
 
 }

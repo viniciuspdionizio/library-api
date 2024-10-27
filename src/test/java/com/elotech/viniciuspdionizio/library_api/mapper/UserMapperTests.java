@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
@@ -18,37 +19,45 @@ public class UserMapperTests {
     private UserMapper userMapper;
 
     @Test
-    public void shouldMapUserRequestToEntity() {
-        var entity = userMapper.toEntity(new UserRequestDTO("Vinicius", "viniciuspdionizio@gmail.com", "123456"));
+    public void shouldMapDTOToEntity() {
+        var dto = new UserRequestDTO("Vinicius", "vinicius@email.com", "123456");
+        var entity = userMapper.toEntity(dto);
         assertNull(entity.getId());
-        assertEquals("Vinicius", entity.getName());
-        assertEquals("viniciuspdionizio@gmail.com", entity.getEmail());
-        assertEquals("123456", entity.getPhoneNumber());
+        assertEquals(dto.name(), entity.getName());
+        assertEquals(dto.email(), entity.getEmail());
+        assertEquals(dto.phoneNumber(), entity.getPhoneNumber());
     }
 
     @Test
-    public void shouldMapUserEntityToDTO() {
-        var entity = new UserEntity();
+    public void shouldMapEntityTODTO() {
+        var entity = new UserEntity(1);
         entity.setName("Vinicius");
-        entity.setEmail("viniciuspdionizio@gmail.com");
+        entity.setEmail("vinicius@email.com");
         entity.setPhoneNumber("123456");
         var dto = userMapper.toDTO(entity);
-        assertEquals("Vinicius", dto.name());
-        assertEquals("viniciuspdionizio@gmail.com", dto.email());
-        assertEquals("123456", dto.phoneNumber());
+        assertEquals(entity.getId(), dto.id());
+        assertEquals(entity.getName(), dto.name());
+        assertEquals(entity.getEmail(), dto.email());
+        assertEquals(entity.getPhoneNumber(), dto.phoneNumber());
     }
 
     @Test
     void shouldUpdateEntity() {
-        var entity = new UserEntity();
-        entity.setName("Vinicius");
-        entity.setEmail("viniciuspdionizio@gmail.com");
+        var entity = new UserEntity(1);
+        entity.setName("Original name");
+        entity.setEmail("original@email.com");
         entity.setPhoneNumber("123456");
-        var dto = new UserRequestDTO("Vinicius", "viniciuspdionizio@gmail.com", null);
+        var dto = new UserRequestDTO("Edited name", "edited@email.com", null);
+        assertNotNull(entity.getId());
+        assertNotEquals(dto.name(), entity.getName());
+        assertNotEquals(dto.email(), entity.getEmail());
+        assertNotEquals(dto.phoneNumber(), entity.getPhoneNumber());
+
         this.userMapper.update(dto, entity);
-        assertEquals("Vinicius", dto.name());
-        assertEquals("viniciuspdionizio@gmail.com", dto.email());
-        assertNotEquals("123456", dto.phoneNumber());
+        assertNotNull(entity.getId());
+        assertEquals(dto.name(), entity.getName());
+        assertEquals(dto.email(), entity.getEmail());
+        assertEquals(dto.phoneNumber(), entity.getPhoneNumber());
     }
 
 }

@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -44,10 +46,9 @@ public class UserRestController implements UserController {
 
     @Override
     @GetMapping("/{id}/recommendations")
-    public Page<BookResponseDTO> getRecommendations(@PathVariable Integer id,
-                                                    @RequestParam(required = false) Boolean status,
-                                                    Pageable pageable) {
-        return this.bookService.getRecommendationsByUserId(id, status, pageable);
+    public List<BookResponseDTO> getRecommendations(@PathVariable Integer id,
+                                                    @RequestParam(required = false) Boolean status) {
+        return this.bookService.getRecommendationsByUserId(id, status);
     }
 
     @Override

@@ -7,13 +7,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface UserController {
 
     ResponseEntity<UserResponseDTO> getById(Integer id);
 
     Page<UserResponseDTO> getAll(String filter, Pageable pageable);
 
-    Page<BookResponseDTO> getRecommendations(Integer id, Boolean status, Pageable pageable);
+    List<BookResponseDTO> getRecommendations(Integer id, Boolean status);
 
     ResponseEntity<UserResponseDTO> register(UserRequestDTO userRequestDTO);
 

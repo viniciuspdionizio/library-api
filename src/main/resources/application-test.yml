@@ -6,8 +6,10 @@ spring:
     password: ${DATASOURCE_PASS:admin}
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     open-in-view: false
     database: postgresql
   flyway:
     clean-disabled: false
+    baseline-on-migrate: true
+    clean-on-validation-error: true

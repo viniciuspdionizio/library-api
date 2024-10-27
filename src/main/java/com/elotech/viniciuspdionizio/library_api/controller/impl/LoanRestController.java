@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ public class LoanRestController implements LoanController {
     private final LoanService loanService;
 
     @Override
+    @GetMapping("/page")
     public Page<LoanResponseDTO> getAll(@RequestParam(required = false) Integer userId,
                                         @RequestParam(required = false) Integer bookId,
                                         @RequestParam(defaultValue = "true") Boolean status,

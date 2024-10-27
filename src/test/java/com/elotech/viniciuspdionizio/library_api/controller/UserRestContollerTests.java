@@ -20,9 +20,30 @@ public class UserRestContollerTests {
     private MockMvc mockMvc;
 
     @Test
-    void shouldReturnOk() throws Exception {
+    void shouldGetAllUsers() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/users/page"))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+    }
+
+    @Test
+    void shouldGetUserById() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/1"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+    }
+
+    @Test
+    void shouldNotGetUserByIdWithNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/-1"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void shouldRegisterNewUser() throws Exception {
+        var user = new UserRequestDTO("Vinicius", "vinicius@email.com", "123456");
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(user)))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
@@ -32,18 +53,27 @@ public class UserRestContollerTests {
     }
 
     @Test
-    void shouldRegisterNewUser() throws Exception {
-        var user = new UserRequestDTO("Vinicius", "viniciuspdionizio@gmail.com", "123456");
+    void shouldNotRegisterUserWithNullName() throws Exception {
+        var user = new UserRequestDTO(null, "vinicius@email.com", "123456");
         mockMvc.perform(MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(user)))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
-    void shouldReturnNotFound() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/users/-1"))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    void shouldUpdateUser() throws Exception {
+        var user = new UserRequestDTO("Updated name", "vinicius@email.com", "123456");
+        mockMvc.perform(MockMvcRequestBuilders.put("/users/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(user)))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+    }
+
+    @Test
+    void shouldDeleteUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/1"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
     }
 
 }

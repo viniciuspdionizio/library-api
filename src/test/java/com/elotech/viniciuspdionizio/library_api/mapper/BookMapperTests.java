@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
@@ -21,11 +22,13 @@ public class BookMapperTests {
 
     @Test
     public void shouldMapBookRequestToEntity() {
-        var entity = bookMapper.toEntity(new BookRequestDTO("Book 1", "Vinicius Dionizio", "123456", LocalDate.now(), BookCategory.FICTION));
+        var dto = new BookRequestDTO("Book 1", "Vinicius Dionizio", "123456", LocalDate.now(), BookCategory.FICTION);
+        var entity = bookMapper.toEntity(dto);
         assertNull(entity.getId());
-        assertEquals("Book 1", entity.getTitle());
-        assertEquals("Vinicius Dionizio", entity.getAuthor());
-        assertEquals(LocalDate.now(), entity.getPublishedDate());
+        assertEquals(dto.title(), entity.getTitle());
+        assertEquals(dto.author(), entity.getAuthor());
+        assertEquals(dto.category(), entity.getCategory());
+        assertEquals(dto.isbn(), entity.getIsbn());
     }
 
     @Test
@@ -35,9 +38,12 @@ public class BookMapperTests {
         entity.setAuthor("Vinicius Dionizio");
         entity.setPublishedDate(LocalDate.now());
         var dto = bookMapper.toDTO(entity);
-        assertEquals("Book 1", dto.title());
-        assertEquals("Vinicius Dionizio", dto.author());
-        assertEquals(LocalDate.now(), dto.publishedDate());
+        assertEquals(entity.getId(), dto.id());
+        assertEquals(entity.getTitle(), dto.title());
+        assertEquals(entity.getAuthor(), dto.author());
+        assertEquals(entity.getPublishedDate(), dto.publishedDate());
+        assertEquals(entity.getCategory(), dto.category());
+        assertEquals(entity.getIsbn(), dto.isbn());
     }
 
     @Test
@@ -48,11 +54,18 @@ public class BookMapperTests {
         entity.setIsbn("123456");
         entity.setPublishedDate(LocalDate.now());
         var dto = new BookRequestDTO("Book 2", "Vinicius de Paiva Dionizio", "1234567", LocalDate.now().minusDays(10), BookCategory.BIOGRAPHY);
+        assertNotEquals(dto.title(), entity.getTitle());
+        assertNotEquals(dto.author(), entity.getAuthor());
+        assertNotEquals(dto.isbn(), entity.getIsbn());
+        assertNotEquals(dto.publishedDate(), entity.getPublishedDate());
+        assertNotEquals(dto.category(), entity.getCategory());
+
         this.bookMapper.update(dto, entity);
-        assertEquals("Book 2", entity.getTitle());
-        assertEquals("Vinicius de Paiva Dionizio", entity.getAuthor());
-        assertEquals("1234567", entity.getIsbn());
-        assertEquals(LocalDate.now().minusDays(10), entity.getPublishedDate());
+        assertEquals(dto.title(), entity.getTitle());
+        assertEquals(dto.author(), entity.getAuthor());
+        assertEquals(dto.isbn(), entity.getIsbn());
+        assertEquals(dto.publishedDate(), entity.getPublishedDate());
+        assertEquals(dto.category(), entity.getCategory());
     }
 
 }

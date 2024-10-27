@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -35,12 +37,10 @@ public class BookService {
         return this.bookRepository.findAll(filter, status, pageable).map(this.bookMapper::toDTO);
     }
 
-    public Page<BookResponseDTO> getRecommendationsByUserId(@Nonnull Integer userId, @Nullable Boolean status, Pageable pageable) {
+    public List<BookResponseDTO> getRecommendationsByUserId(@Nonnull Integer userId, @Nullable Boolean status) {
         this.checkIfExists(userId);
-        pageable = PageableUtil.addSort(pageable, "id");
-        var categories = this.bookRepository.findCategoriesByUser(userId, status);
-        return this.bookRepository.findAllRecommendations(categories, pageable)
-                .map(this.bookMapper::toDTO);
+        return this.bookRepository.findAllRecommendations(userId)
+                .stream().map(this.bookMapper::toDTO).toList();
     }
 
     @Transactional

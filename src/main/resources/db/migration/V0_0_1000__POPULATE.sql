@@ -83,8 +83,8 @@ VALUES (1, 1, '2024-09-15', '2024-09-30', FALSE), -- Usuário 1 devolveu o Livro
        (3, 27, '2024-10-25', '2024-10-30', TRUE), -- Usuário 3, Livro 27
        (1, 28, '2024-10-20', '2024-10-30', TRUE), -- Usuário 1, Livro 28
        (2, 29, '2024-10-22', '2024-10-29', TRUE), -- Usuário 2, Livro 29
-       (3, 30, '2024-10-26', '2024-10-30', TRUE);
--- Usuário 3, Livro 30
+       (3, 30, '2024-10-26', '2024-10-30', TRUE); -- Usuário 3, Livro 30
+
 
 -- Inserindo 20 empréstimos na tabela loan com status FALSE
 INSERT INTO loan (user_id, book_id, loan_date, return_date, status)
